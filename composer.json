@@ -1,0 +1,62 @@
+{
+    "name": "coxlr/laravel-ringcentral",
+    "description": "A Laravel package for the RingCentral SDK for PHP",
+    "keywords": [
+        "coxlr",
+        "laravel",
+        "ringcentral"
+    ],
+    "homepage": "https://github.com/coxlr/laravel-ringcentral",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Lee Cox",
+            "email": "hey@leecox.me",
+            "homepage": "https://leecox.me",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.4",
+        "illuminate/support": "^8.0",
+        "ringcentral/ringcentral-php": "^2.1"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^2.16",
+        "orchestra/testbench": "^6.0",
+        "phpunit/phpunit": "^9.3",
+        "vimeo/psalm": "^3.11",
+        "vlucas/phpdotenv": "^5.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Coxlr\\RingCentral\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Coxlr\\RingCentral\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "psalm": "vendor/bin/psalm",
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage",
+        "format": "vendor/bin/php-cs-fixer fix --allow-risky=yes"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "RingCentralServiceProvider"
+            ],
+            "aliases": {
+                "RingCentral": "RingCentralFacade"
+            }
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

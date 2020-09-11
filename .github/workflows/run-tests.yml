@@ -1,0 +1,58 @@
+name: Tests
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: true
+      max-parallel: 1
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        php: [7.4]
+        laravel: [8.*]
+        dependency-version: [prefer-lowest, prefer-stable]
+        include:
+          - laravel: 8.*
+            testbench: 6.*
+
+    name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.dependency-version }} - ${{ matrix.os }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.composer/cache/files
+          key: dependencies-laravel-${{ matrix.laravel }}-php-${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick
+          coverage: none
+
+      - name: Install dependencies
+        run: |
+          composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
+          composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-suggest
+
+      - name: Execute tests
+        env:
+          RINGCENTRAL_ADMIN_EXTENSION: ${{ secrets.RINGCENTRAL_ADMIN_EXTENSION }}
+          RINGCENTRAL_ADMIN_PASSWORD: ${{ secrets.RINGCENTRAL_ADMIN_PASSWORD }}
+          RINGCENTRAL_CLIENT_ID: ${{ secrets.RINGCENTRAL_CLIENT_ID }}
+          RINGCENTRAL_CLIENT_SECRET: ${{ secrets.RINGCENTRAL_CLIENT_SECRET }}
+          RINGCENTRAL_OPERATOR_EXTENSION: ${{ secrets.RINGCENTRAL_OPERATOR_EXTENSION }}
+          RINGCENTRAL_OPERATOR_PASSWORD: ${{ secrets.RINGCENTRAL_OPERATOR_PASSWORD }}
+          RINGCENTRAL_USERNAME: ${{ secrets.RINGCENTRAL_USERNAME }}
+          RINGCENTRAL_SERVER_URL: https://platform.ringcentral.com
+          RINGCENTRAL_RECEIVER: "+18042221111"
+        run: vendor/bin/phpunit
+
+      - name: Wait 10 seconds before next test run to avoid hitting api rate limit
+        run: sleep 10
