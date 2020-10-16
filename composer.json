@@ -50,10 +50,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "RingCentralServiceProvider"
+                "Coxlr\\RingCentral\\RingCentralServiceProvider"
             ],
             "aliases": {
-                "RingCentral": "RingCentralFacade"
+                "RingCentral": "Coxlr\\RingCentral\\Facades\\RingCentral"
             }
         }
     },

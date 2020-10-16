@@ -5,8 +5,6 @@ namespace Coxlr\RingCentral;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Support\ServiceProvider;
 
-//use Coxlr\LaravelRingcentral\Commands\LaravelRingcentralCommand;
-
 class RingCentralServiceProvider extends ServiceProvider
 {
     public function boot()
@@ -15,26 +13,7 @@ class RingCentralServiceProvider extends ServiceProvider
             $this->publishes([
                 __DIR__ . '/../config/ringcentral.php' => config_path('ringcentral.php'),
             ], 'config');
-
-            /*
-            $this->publishes([
-                __DIR__ . '/../resources/views' => base_path('resources/views/vendor/laravel-ringcentral'),
-            ], 'views');
-
-            $migrationFileName = 'create_laravel_ringcentral_table.php';
-            if (! $this->migrationFileExists($migrationFileName)) {
-                $this->publishes([
-                    __DIR__ . "/../database/migrations/{$migrationFileName}.stub" => database_path('migrations/' . date('Y_m_d_His', time()) . '_' . $migrationFileName),
-                ], 'migrations');
-            }
-
-            $this->commands([
-                LaravelRingcentralCommand::class,
-            ]);
-            */
         }
-
-        //$this->loadViewsFrom(__DIR__ . '/../resources/views', 'laravel-ringcentral');
     }
 
     public function register()
