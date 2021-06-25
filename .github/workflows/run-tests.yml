@@ -10,7 +10,7 @@ jobs:
       max-parallel: 1
       matrix:
         os: [ubuntu-latest, windows-latest]
-        php: [7.4]
+        php: [7.4, 8.0]
         laravel: [8.*]
         dependency-version: [prefer-lowest, prefer-stable]
         include:
@@ -54,5 +54,5 @@ jobs:
           RINGCENTRAL_RECEIVER: "+18042221111"
         run: vendor/bin/phpunit
 
-      - name: Wait 20 seconds before next test run to avoid hitting api rate limit
-        run: sleep 20
+      - name: Wait 30 seconds before next test run to avoid hitting api rate limit
+        run: sleep 30
