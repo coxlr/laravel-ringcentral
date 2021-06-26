@@ -73,15 +73,15 @@ class RingCentralOperatorTest extends TestCase
     /** @test */
     public function it_can_retrieve_operator_sent_sms_messages_from_a_set_date()
     {
-        sleep(1);
-        $result = $this->ringCentral->sendMessage([
+        sleep(5);
+        $this->ringCentral->sendMessage([
             'to' => env('RINGCENTRAL_RECEIVER'),
             'text' => 'Test Message',
         ]);
-        $result = $this->ringCentral->getOperatorMessages((new \DateTime())->modify('-1 seconds'));
+        $result = $this->ringCentral->getOperatorMessages((new \DateTime())->modify('-2 seconds'));
 
         //Note: Is 1 when running full test suite up to this point otherwise is 0 when test run individually
-        $this->assertEquals(1, count($result));
+        $this->assertCount(1, $result);
 
         $firstMessage = (array) $result[0];
 
