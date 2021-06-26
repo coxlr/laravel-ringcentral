@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-ringcentral` will be documented in this file
 
+## 2.0.1 - 2021-06-25
+
+- Fix GitHub actions tests
+
 ## 2.0.0 - 2021-06-25
 
 - support PHP 8+
