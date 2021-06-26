@@ -262,7 +262,7 @@ class RingCentral
         return $r->json()->records;
     }
 
-    public function getMessages(string $extensionId = '~', ?object $fromDate = null, ?object $toDate = null, $perPage)
+    public function getMessages(string $extensionId, ?object $fromDate = null, ?object $toDate = null, $perPage)
     {
         $dates = [];
 

@@ -9,7 +9,7 @@ This is a simple Laravel Service Provider providing access to the [RingCentral S
 
 ## Installation
 
-This package requires PHP 7.4 and Laravel 8 or higher.
+This package requires PHP 8.0 and Laravel 8 or higher.
 
 To install the PHP client library using Composer:
 
