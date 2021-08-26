@@ -305,4 +305,16 @@ class RingCentral
 
         return $this->ringCentral->get('/account/~/extension/'.$extensionId.'/message-store/' . $messageId . '/content/' . $attachementId);
     }
+    
+    public function getOperatorInstance() {
+        $this->authenticateOperator();
+
+        return $this->ringCentral;
+    }
+
+    public function getAdminInstance() {
+        $this->authenticateAdmin();
+
+        return $this->ringCentral;
+    }
 }
