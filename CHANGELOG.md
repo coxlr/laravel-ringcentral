@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-ringcentral` will be documented in this file
 
+## 2.1.0 - 2022-02-08
+
+- Allow Laravel 9
+
 ## 2.0.1 - 2021-06-25
 
 - Fix GitHub actions tests
