@@ -56,5 +56,5 @@ jobs:
           RINGCENTRAL_RECEIVER: "+18042221111"
         run: vendor/bin/phpunit
 
-      - name: Wait 60 seconds before next test run to avoid hitting api rate limit
-        run: sleep 60
+      - name: Wait 120 seconds before next test run to avoid hitting api rate limit
+        run: sleep 120
