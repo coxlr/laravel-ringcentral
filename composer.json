@@ -23,7 +23,7 @@
     "require-dev": {
         "orchestra/testbench": "^6.0|^7.0",
         "phpunit/phpunit": "^9.3.0",
-        "vimeo/psalm": "^3.18",
+        "vimeo/psalm": "^3.18|^4.18",
         "vlucas/phpdotenv": "^5.3"
     },
     "autoload": {
