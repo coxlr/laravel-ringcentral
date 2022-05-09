@@ -1,18 +1,25 @@
 {
-    "name": "coxlr/laravel-ringcentral",
+    "name": "drivejohnsons/laravel-ringcentral",
     "description": "A Laravel package for the RingCentral SDK for PHP",
     "keywords": [
         "coxlr",
         "laravel",
-        "ringcentral"
+        "ringcentral",
+        "drivejohnsons"
     ],
-    "homepage": "https://github.com/coxlr/laravel-ringcentral",
+    "homepage": "https://github.com/drivejohnsons/laravel-ringcentral",
     "license": "MIT",
     "authors": [
         {
             "name": "Lee Cox",
             "email": "hey@leecox.me",
             "homepage": "https://leecox.me",
+            "role": "Developer"
+        },
+        {
+            "name": "Charlie Benjafield",
+            "email": "me@cbenjafield.com",
+            "homepage": "https://cbenjafield.com",
             "role": "Developer"
         }
     ],
