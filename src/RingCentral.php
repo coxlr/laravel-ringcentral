@@ -305,4 +305,9 @@ class RingCentral
 
         return $this->ringCentral->get('/account/~/extension/'.$extensionId.'/message-store/' . $messageId . '/content/' . $attachementId);
     }
+
+    public function getClient()
+    {
+        return $this->ringCentral;
+    }
 }
