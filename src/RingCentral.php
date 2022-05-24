@@ -320,6 +320,9 @@ class RingCentral
 
     public function client()
     {
+        if(! $this->ringCentral) {
+            $this->connect();
+        }
         return $this->ringCentral;
     }
 }
