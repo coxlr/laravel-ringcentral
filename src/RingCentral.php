@@ -317,4 +317,9 @@ class RingCentral
         $this->login($username, $extension, $password);
         return $this->ringCentral;
     }
+
+    public function client()
+    {
+        return $this->ringCentral;
+    }
 }

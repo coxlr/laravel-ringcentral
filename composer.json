@@ -25,7 +25,7 @@
     ],
     "require": {
         "php": "^8.0",
-        "ringcentral/ringcentral-php": "^2.3.1"
+        "ringcentral/ringcentral-php": "^2.2.5"
     },
     "require-dev": {
         "orchestra/testbench": "^6.0|^7.0",
