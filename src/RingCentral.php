@@ -308,6 +308,13 @@ class RingCentral
 
     public function getClient()
     {
+        $this->authenticateAdmin();
+        return $this->ringCentral;
+    }
+
+    public function getLoginClient(string $username, string $extension, string $password)
+    {
+        $this->login($username, $extension, $password);
         return $this->ringCentral;
     }
 }
