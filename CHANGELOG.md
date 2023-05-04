@@ -2,7 +2,11 @@
 
 All notable changes to `laravel-ringcentral` will be documented in this file
 
-## 2.1.0 - 2022-02-08
+## 2.2.0 - 2023-05-03
+
+- Allow Laravel 10
+- 
+- ## 2.1.0 - 2022-02-08
 
 - Allow Laravel 9
 
