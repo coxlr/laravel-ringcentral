@@ -33,12 +33,10 @@ RINGCENTRAL_CLIENT_ID=my_client_id
 RINGCENTRAL_CLIENT_SECRET=my_client_secret
 RINGCENTRAL_SERVER_URL=my_server_url
 RINGCENTRAL_USERNAME=my_username
-RINGCENTRAL_OPERATOR_EXTENSION=my_operator_extension
-RINGCENTRAL_OPERATOR_PASSWORD=my_operator_password
+RINGCENTRAL_OPERATOR_TOKEN=my_operator_jwt
 
 #If admin details are a different extension to the operator
-RINGCENTRAL_ADMIN_EXTENSION=my_admin_extension
-RINGCENTRAL_ADMIN_PASSWORD=my_admin_password
+RINGCENTRAL_ADMIN_TOKEN=my_admin_jwt
 
 
 ```
@@ -182,6 +180,17 @@ For more information on using the RingCentral client library, see the [official 
 ``` bash
 composer test
 ```
+If using the RingCentral sandbox environment when testing set the following environment variable to true to handle sandbox message prefix.
+
+```dotenv
+RINGCENTRAL_IS_SANDBOX=true
+```
+An optional environment value can be set to prevent hitting RingCentral rate limits when testing. This will add a delay for the set seconds before each test.
+
+```dotenv
+RINGCENTRAL_DELAY_REQUEST_SECONDS=20
+```
+
 
 ## Changelog
 

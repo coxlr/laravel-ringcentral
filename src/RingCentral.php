@@ -4,183 +4,160 @@ namespace Coxlr\RingCentral;
 
 use Coxlr\RingCentral\Exceptions\CouldNotAuthenticate;
 use Coxlr\RingCentral\Exceptions\CouldNotSendMessage;
+use RingCentral\SDK\Http\ApiException;
+use RingCentral\SDK\Http\ApiResponse;
+use RingCentral\SDK\Platform\Platform;
 use RingCentral\SDK\SDK;
 
 class RingCentral
 {
-    /** @var \RingCentral\SDK\Platform\Platform */
-    protected $ringCentral;
+    protected ?Platform $ringCentral = null;
 
-    /** @var string */
-    protected $serverUrl;
+    protected string $serverUrl;
 
-    /** @var string */
-    protected $clientId;
+    protected string $clientId;
 
-    /** @var string */
-    protected $clientSecret;
+    protected string $clientSecret;
 
-    /** @var string */
-    protected $username;
+    protected string $username;
 
-    /** @var string */
-    protected $operatorExtension;
+    protected ?string $operatorExtension = null;
 
-    /** @var string */
-    protected $operatorPassword;
+    protected ?string $adminExtension = null;
 
-    /** @var string */
-    protected $adminExtension;
+    protected string $loggedInExtension;
 
-    /** @var string */
-    protected $adminPassword;
+    protected string $loggedInExtensionId;
 
-    /** @var string */
-    protected $loggedInExtension;
+    protected string $operatorToken;
 
-    /** @var string */
-    protected $loggedInExtensionId;
+    protected ?string $adminToken = null;
 
-    public function setClientId(string $clientId)
+    public function setClientId(string $clientId): static
     {
         $this->clientId = $clientId;
 
         return $this;
     }
 
-    public function setClientSecret(string $clientSecret)
+    public function setClientSecret(string $clientSecret): static
     {
         $this->clientSecret = $clientSecret;
 
         return $this;
     }
 
-    public function setServerUrl(string $serverUrl)
+    public function setServerUrl(string $serverUrl): static
     {
         $this->serverUrl = $serverUrl;
 
         return $this;
     }
 
-    public function setUsername(string $username)
+    public function setUsername(string $username): static
     {
         $this->username = $username;
 
         return $this;
     }
 
-    public function setOperatorExtension(string $operatorExtension)
+    public function setOperatorToken(string $operatorToken): static
     {
-        $this->operatorExtension = $operatorExtension;
+        $this->operatorToken = $operatorToken;
 
         return $this;
     }
 
-    public function setOperatorPassword(string $operatorPassword)
+    public function setAdminToken(string $adminToken): static
     {
-        $this->operatorPassword = $operatorPassword;
+        $this->adminToken = $adminToken;
 
         return $this;
     }
 
-    public function setAdminExtension(string $adminExtension)
-    {
-        $this->adminExtension = $adminExtension;
-
-        return $this;
-    }
-
-    public function setAdminPassword(string $adminPassword)
-    {
-        $this->adminPassword = $adminPassword;
-
-        return $this;
-    }
-
-    public function clientId()
+    public function clientId(): string
     {
         return $this->clientId;
     }
 
-    public function clientSecret()
+    public function clientSecret(): string
     {
         return $this->clientSecret;
     }
 
-    public function serverUrl()
+    public function serverUrl(): string
     {
         return $this->serverUrl;
     }
 
-    public function username()
+    public function username(): string
     {
         return $this->username;
     }
 
-    public function operatorExtension()
+    public function operatorExtension(): null|string
     {
         return $this->operatorExtension;
     }
 
-    public function operatorPassword()
+    public function operatorToken(): string
     {
-        return $this->operatorPassword;
+        return $this->operatorToken;
     }
 
-    public function adminExtension()
+    public function adminExtension(): null|string
     {
         return $this->adminExtension ? : $this->operatorExtension;
     }
 
-    public function adminPassword()
+    public function adminToken(): string
     {
-        return $this->adminPassword ?: $this->operatorPassword;
+        return $this->adminToken ?: $this->operatorToken;
     }
 
-    public function connect()
+    public function connect(): void
     {
         $this->ringCentral = (new SDK($this->clientId(), $this->clientSecret(), $this->serverUrl()))->platform();
     }
 
-    public function loginOperator()
+    public function loginOperator(): void
     {
-        $this->login($this->username(), $this->operatorExtension(), $this->operatorPassword());
+        $this->login($this->operatorToken());
     }
 
-    public function loginAdmin()
+    public function loginAdmin(): void
     {
-        $this->login($this->username(), $this->adminExtension(), $this->adminPassword());
+        $this->login($this->adminToken());
     }
 
-    public function login(string $username, string $extension, string $password)
+    public function login(string $token): void
     {
-        $this->ringCentral->login([
-            'username' => $username,
-            'extension' => $extension,
-            'password' => $password,
-        ]);
+        $this->ringCentral->login([ 'jwt' => $token, ]);
 
         $this->setLoggedInExtension();
     }
 
-    public function setLoggedInExtension()
+    public function setLoggedInExtension(): void
     {
         $extension = $this->ringCentral->get('/account/~/extension/~/')->json();
         $this->loggedInExtensionId = $extension->id;
         $this->loggedInExtension = $extension->extensionNumber;
     }
 
-    public function loggedInExtensionId()
+    public function loggedInExtensionId(): string
     {
         return $this->loggedInExtensionId;
     }
 
-    public function loggedInExtension()
+    public function loggedInExtension(): string
     {
         return $this->loggedInExtension;
     }
 
-    public function authenticateOperator()
+    /**
+     * @throws CouldNotAuthenticate
+     */
+    public function authenticateOperator(): bool
     {
         if (! $this->ringCentral) {
             $this->connect();
@@ -197,7 +174,7 @@ class RingCentral
         return true;
     }
 
-    public function operatorLoggedIn()
+    public function operatorLoggedIn(): bool
     {
         if ($this->ringCentral->loggedIn()) {
             return $this->loggedInExtension() === $this->operatorExtension();
@@ -206,7 +183,10 @@ class RingCentral
         return false;
     }
 
-    public function authenticateAdmin()
+    /**
+     * @throws CouldNotAuthenticate|ApiException
+     */
+    public function authenticateAdmin(): bool
     {
         if (! $this->ringCentral) {
             $this->connect();
@@ -223,7 +203,10 @@ class RingCentral
         return true;
     }
 
-    public function adminLoggedIn()
+    /**
+     * @throws ApiException
+     */
+    public function adminLoggedIn(): bool
     {
         if ($this->ringCentral->loggedIn()) {
             return $this->ringCentral->get('/account/~/extension/~/')->json()->extensionNumber === $this->adminExtension();
@@ -232,7 +215,12 @@ class RingCentral
         return false;
     }
 
-    public function sendMessage(array $message)
+    /**
+     * @throws CouldNotSendMessage
+     * @throws CouldNotAuthenticate
+     * @throws ApiException
+     */
+    public function sendMessage(array $message): ApiResponse
     {
         if (empty($message['to'])) {
             throw CouldNotSendMessage::toNumberNotProvided();
@@ -253,7 +241,11 @@ class RingCentral
         ]);
     }
 
-    public function getExtensions()
+    /**
+     * @throws CouldNotAuthenticate
+     * @throws ApiException
+     */
+    public function getExtensions(): array
     {
         $this->authenticateAdmin();
 
@@ -262,7 +254,10 @@ class RingCentral
         return $r->json()->records;
     }
 
-    public function getMessages(string $extensionId, ?object $fromDate = null, ?object $toDate = null, $perPage)
+    /**
+     * @throws ApiException
+     */
+    public function getMessages(string $extensionId, ?object $fromDate = null, ?object $toDate = null, ?int $perPage = 100): array
     {
         $dates = [];
 
@@ -285,21 +280,33 @@ class RingCentral
         return $r->json()->records;
     }
 
-    public function getOperatorMessages(?object $fromDate = null, ?object $toDate = null, ?int $perPage = 100)
+    /**
+     * @throws ApiException
+     * @throws CouldNotAuthenticate
+     */
+    public function getOperatorMessages(?object $fromDate = null, ?object $toDate = null, ?int $perPage = 100): array
     {
         $this->authenticateOperator();
 
         return $this->getMessages('~', $fromDate, $toDate, $perPage);
     }
 
-    public function getMessagesForExtensionId(string $extensionId, ?object $fromDate = null, ?object $toDate = null, ?int $perPage = 100)
+    /**
+     * @throws CouldNotAuthenticate
+     * @throws ApiException
+     */
+    public function getMessagesForExtensionId(string $extensionId, ?object $fromDate = null, ?object $toDate = null, ?int $perPage = 100): array
     {
         $this->authenticateAdmin();
 
         return $this->getMessages($extensionId, $fromDate, $toDate, $perPage);
     }
 
-    public function getMessageAttachmentById(string $extensionId, string $messageId, string $attachementId)
+    /**
+     * @throws CouldNotAuthenticate
+     * @throws ApiException
+     */
+    public function getMessageAttachmentById(string $extensionId, string $messageId, string $attachementId): ApiResponse
     {
         $this->authenticateAdmin();
 

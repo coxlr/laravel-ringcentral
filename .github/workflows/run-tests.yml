@@ -50,15 +50,15 @@ jobs:
 
       - name: Execute tests
         env:
-          RINGCENTRAL_ADMIN_EXTENSION: ${{ secrets.RINGCENTRAL_ADMIN_EXTENSION }}
-          RINGCENTRAL_ADMIN_PASSWORD: ${{ secrets.RINGCENTRAL_ADMIN_PASSWORD }}
           RINGCENTRAL_CLIENT_ID: ${{ secrets.RINGCENTRAL_CLIENT_ID }}
           RINGCENTRAL_CLIENT_SECRET: ${{ secrets.RINGCENTRAL_CLIENT_SECRET }}
-          RINGCENTRAL_OPERATOR_EXTENSION: ${{ secrets.RINGCENTRAL_OPERATOR_EXTENSION }}
-          RINGCENTRAL_OPERATOR_PASSWORD: ${{ secrets.RINGCENTRAL_OPERATOR_PASSWORD }}
           RINGCENTRAL_USERNAME: ${{ secrets.RINGCENTRAL_USERNAME }}
-          RINGCENTRAL_SERVER_URL: https://platform.ringcentral.com
-          RINGCENTRAL_RECEIVER: "+18042221111"
+          RINGCENTRAL_SERVER_URL: ${{ secrets.RINGCENTRAL_SERVER_URL }}
+          RINGCENTRAL_ADMIN_TOKEN: ${{ secrets.RINGCENTRAL_RECEIVER:}}
+          RINGCENTRAL_OPERATOR_TOKEN: ${{ secrets.RINGCENTRAL_RECEIVER:}}
+          RINGCENTRAL_RECEIVER: ${{ secrets.RINGCENTRAL_RECEIVER:}}
+          RINGCENTRAL_DELAY_REQUEST_SECONDS: ${{ secrets.RINGCENTRALDELAY_REQUEST_SECONDS:}}
+          RINGCENTRAL_IS_SANDBOX: ${{ secrets.RINGCENTRAL_IS_SANDBOX:}}
         run: vendor/bin/phpunit
 
       - name: Wait 120 seconds before next test run to avoid hitting api rate limit

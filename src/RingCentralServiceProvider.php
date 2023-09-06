@@ -3,11 +3,13 @@
 namespace Coxlr\RingCentral;
 
 use Illuminate\Contracts\Config\Repository as Config;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\ServiceProvider;
+use RuntimeException;
 
 class RingCentralServiceProvider extends ServiceProvider
 {
-    public function boot()
+    public function boot(): void
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
@@ -16,7 +18,7 @@ class RingCentralServiceProvider extends ServiceProvider
         }
     }
 
-    public function register()
+    public function register(): void
     {
         // Bind RingCentral Client in Service Container.
         $this->app->singleton('ringcentral', function () {
@@ -29,10 +31,9 @@ class RingCentralServiceProvider extends ServiceProvider
     /**
      * Create a new RingCentral Client.
      *
-     * @return RingCentral
-     *
+     * @throws BindingResolutionException
      */
-    protected function createRingCentralClient()
+    protected function createRingCentralClient(): RingCentral
     {
         // Check for RingCentral config file.
         if (! $this->hasRingCentralConfigSection()) {
@@ -55,12 +56,8 @@ class RingCentralServiceProvider extends ServiceProvider
             $this->raiseRunTimeException('Missing username.');
         }
 
-        if ($this->ringCentralConfigHasNo('operator_extension')) {
-            $this->raiseRunTimeException('Missing extension.');
-        }
-
-        if ($this->ringCentralConfigHasNo('operator_password')) {
-            $this->raiseRunTimeException('Missing password.');
+        if ($this->ringCentralConfigHasNo('operator_token')) {
+            $this->raiseRunTimeException('Missing operator token.');
         }
 
         $ringCentral = (new RingCentral())
@@ -68,15 +65,10 @@ class RingCentralServiceProvider extends ServiceProvider
             ->setClientSecret(config('ringcentral.client_secret'))
             ->setServerUrl(config('ringcentral.server_url'))
             ->setUsername(config('ringcentral.username'))
-            ->setOperatorExtension(config('ringcentral.operator_extension'))
-            ->setOperatorPassword(config('ringcentral.operator_password'));
+            ->setOperatorToken(config('ringcentral.operator_token'));
 
-        if ($this->ringCentralConfigHas('admin_extension')) {
-            $ringCentral->setAdminExtension(config('ringcentral.admin_extension'));
-        }
-
-        if ($this->ringCentralConfigHas('admin_password')) {
-            $ringCentral->setAdminPassword(config('ringcentral.admin_password'));
+        if ($this->ringCentralConfigHas('admin_token')) {
+            $ringCentral->setAdminToken(config('ringcentral.admin_token'));
         }
 
         return $ringCentral;
@@ -85,10 +77,9 @@ class RingCentralServiceProvider extends ServiceProvider
     /**
      * Checks if has global RingCentral configuration section.
      *
-     * @return bool
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     * @throws BindingResolutionException
      */
-    protected function hasRingCentralConfigSection()
+    protected function hasRingCentralConfigSection(): bool
     {
         return $this->app->make(Config::class)
             ->has('ringcentral');
@@ -98,25 +89,19 @@ class RingCentralServiceProvider extends ServiceProvider
      * Checks if RingCentral config does not
      * have a value for the given key.
      *
-     * @param string $key
-     *
-     * @return bool
+     * @throws BindingResolutionException
      */
-    protected function ringCentralConfigHasNo($key)
+    protected function ringCentralConfigHasNo(string $key): bool
     {
         return ! $this->ringCentralConfigHas($key);
     }
 
     /**
-     * Checks if RingCentral config has value for the
-     * given key.
+     * Checks if RingCentral config has value for the given key.
      *
-     * @param string $key
-     *
-     * @return bool
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     * @throws BindingResolutionException
      */
-    protected function ringCentralConfigHas($key)
+    protected function ringCentralConfigHas(string $key): bool
     {
         /** @var Config $config */
         $config = $this->app->make(Config::class);
@@ -136,12 +121,10 @@ class RingCentralServiceProvider extends ServiceProvider
     /**
      * Raises Runtime exception.
      *
-     * @param string $message
-     *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
-    protected function raiseRunTimeException($message)
+    protected function raiseRunTimeException(string $message): void
     {
-        throw new \RuntimeException($message);
+        throw new RuntimeException($message);
     }
 }

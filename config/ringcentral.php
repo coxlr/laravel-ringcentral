@@ -25,19 +25,16 @@ return [
     |
     */
     'username' => function_exists('env') ? env('RINGCENTRAL_USERNAME', '') : '',
-    'operator_extension' => function_exists('env') ? env('RINGCENTRAL_OPERATOR_EXTENSION', '') : '',
-    'operator_password' => function_exists('env') ? env('RINGCENTRAL_OPERATOR_PASSWORD', '') : '',
+    'operator_token' => function_exists('env') ? env('RINGCENTRAL_OPERATOR_TOKEN', '') : '',
 
     /*
     |--------------------------------------------------------------------------
     | Admin Extension Credentials
     |--------------------------------------------------------------------------
     |
-    | If you operator extension is not your admin extension you will need to
-    | supply the admin extnesion details to be able to access functions other
-    | than sent sms
+    | If you operator is not your admin you will need to supply the admin jwt
+    | to be able to access functions other than sent sms
     |
     */
-    'admin_extension' => function_exists('env') ? env('RINGCENTRAL_ADMIN_EXTENSION', '') : '',
-    'admin_password' => function_exists('env') ? env('RINGCENTRAL_ADMIN_PASSWORD', '') : '',
+    'admin_token' => function_exists('env') ? env('RINGCENTRAL_ADMIN_TOKEN', '') : '',
 ];
