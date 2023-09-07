@@ -37,9 +37,8 @@ RINGCENTRAL_OPERATOR_TOKEN=my_operator_jwt
 
 #If admin details are a different extension to the operator
 RINGCENTRAL_ADMIN_TOKEN=my_admin_jwt
-
-
 ```
+This package uses the JWT autentication method. You can learn more about setting up JWT for your RingCentral account [here](https://developers.ringcentral.com/guide/authentication/jwt/quick-start).
 
 ## Usage
 
