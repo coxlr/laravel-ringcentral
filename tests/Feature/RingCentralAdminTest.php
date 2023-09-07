@@ -54,7 +54,7 @@ class RingCentralAdminTest extends TestCase
     /** @test */
     public function it_can_retrieve_sent_sms_messages_for_a_given_extension_previous_24_hours(): void
     {
-        $this->ringCentral->authenticateAdmin();
+        $this->ringCentral->authenticateOperator();
 
         $result = $this->ringCentral->getMessagesForExtensionId($this->ringCentral->loggedInExtensionId());
 

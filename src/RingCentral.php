@@ -107,7 +107,7 @@ class RingCentral
 
     public function adminExtension(): null|string
     {
-        return $this->adminExtension ? : $this->operatorExtension;
+        return $this->adminExtension ?: $this->operatorExtension;
     }
 
     public function adminToken(): string
@@ -123,11 +123,25 @@ class RingCentral
     public function loginOperator(): void
     {
         $this->login($this->operatorToken());
+
+        $this->setOperatorExtension($this->loggedInExtension());
+    }
+
+    public function setOperatorExtension(string $operatorExtension): void
+    {
+        $this->operatorExtension = $operatorExtension;
     }
 
     public function loginAdmin(): void
     {
         $this->login($this->adminToken());
+
+        $this->setAdminExtension($this->loggedInExtension());
+    }
+
+    public function setAdminExtension(string $adminExtension): void
+    {
+        $this->adminExtension = $adminExtension;
     }
 
     public function login(string $token): void
@@ -184,7 +198,7 @@ class RingCentral
     }
 
     /**
-     * @throws CouldNotAuthenticate|ApiException
+     * @throws CouldNotAuthenticate
      */
     public function authenticateAdmin(): bool
     {
@@ -203,13 +217,10 @@ class RingCentral
         return true;
     }
 
-    /**
-     * @throws ApiException
-     */
     public function adminLoggedIn(): bool
     {
         if ($this->ringCentral->loggedIn()) {
-            return $this->ringCentral->get('/account/~/extension/~/')->json()->extensionNumber === $this->adminExtension();
+            return $this->loggedInExtension() === $this->adminExtension();
         }
 
         return false;
