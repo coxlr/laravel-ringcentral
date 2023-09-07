@@ -60,6 +60,3 @@ jobs:
           RINGCENTRAL_DELAY_REQUEST_SECONDS: ${{ secrets.RINGCENTRAL_DELAY_REQUEST_SECONDS }}
           RINGCENTRAL_IS_SANDBOX: ${{ secrets.RINGCENTRAL_IS_SANDBOX }}
         run: vendor/bin/phpunit
-
-      - name: Wait 120 seconds before next test run to avoid hitting api rate limit
-        run: sleep 120
