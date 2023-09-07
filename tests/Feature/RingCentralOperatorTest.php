@@ -25,9 +25,7 @@ class RingCentralOperatorTest extends TestCase
             ->setClientSecret(env('RINGCENTRAL_CLIENT_SECRET'))
             ->setServerUrl(env('RINGCENTRAL_SERVER_URL'))
             ->setUsername(env('RINGCENTRAL_USERNAME'))
-            ->setOperatorToken(env('RINGCENTRAL_OPERATOR_TOKEN'))
-            //->setAdminToken(env('RINGCENTRAL_ADMIN_TOKEN'))
-        ;
+            ->setOperatorToken(env('RINGCENTRAL_OPERATOR_TOKEN'));
 
         $this->delay();
     }
