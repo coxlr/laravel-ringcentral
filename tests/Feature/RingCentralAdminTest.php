@@ -55,19 +55,31 @@ class RingCentralAdminTest extends TestCase
     public function it_can_retrieve_sent_sms_messages_for_a_given_extension_previous_24_hours(): void
     {
         $this->ringCentral->authenticateOperator();
+        $operatorExtensionId = $this->ringCentral->loggedInExtensionId();
 
-        $result = $this->ringCentral->getMessagesForExtensionId($this->ringCentral->loggedInExtensionId());
+        $result = $this->ringCentral->getMessagesForExtensionId($operatorExtensionId);
 
         $firstMessage = (array) $result[0];
 
         $uriParts = explode('/', $firstMessage['uri']);
-        $this->assertEquals($this->ringCentral->loggedInExtensionId(), $uriParts[8]);
+        $this->assertEquals($operatorExtensionId, $uriParts[8]);
 
         $this->assertArrayHasKey('id', $firstMessage);
         $this->assertArrayHasKey('to', $firstMessage);
         $this->assertArrayHasKey('from', $firstMessage);
         $this->assertArrayHasKey('subject', $firstMessage);
         $this->assertArrayHasKey('attachments', $firstMessage);
+    }
+
+    /** @test */
+    public function it_logs_in_the_admin_account_if_different_from_the_admin_account_when_retrieving_sms_messages_for_a_given_extension(): void
+    {
+        $this->ringCentral->authenticateOperator();
+        $operatorExtensionId = $this->ringCentral->loggedInExtensionId();
+
+        $this->ringCentral->getMessagesForExtensionId($operatorExtensionId);
+
+        $this->assertNotEquals($operatorExtensionId, $this->ringCentral->loggedInExtensionId());
     }
 
     /** @test */
@@ -78,8 +90,10 @@ class RingCentralAdminTest extends TestCase
             'text' => 'Test Message',
         ]);
 
+        $operatorExtensionId = $this->ringCentral->loggedInExtensionId();
+
         $result = $this->ringCentral->getMessagesForExtensionId(
-            $this->ringCentral->loggedInExtensionId(),
+            $operatorExtensionId,
             (new \DateTime())->modify('-1 mins')
         );
 
@@ -88,7 +102,7 @@ class RingCentralAdminTest extends TestCase
         $firstMessage = (array) $result[0];
 
         $uriParts = explode('/', $firstMessage['uri']);
-        $this->assertEquals($this->ringCentral->loggedInExtensionId(), $uriParts[8]);
+        $this->assertEquals($operatorExtensionId, $uriParts[8]);
 
         $this->assertArrayHasKey('id', $firstMessage);
         $this->assertArrayHasKey('to', $firstMessage);
@@ -105,8 +119,10 @@ class RingCentralAdminTest extends TestCase
             'text' => 'Test Message',
         ]);
 
+        $operatorExtensionId = $this->ringCentral->loggedInExtensionId();
+
         $result = $this->ringCentral->getMessagesForExtensionId(
-            $this->ringCentral->loggedInExtensionId(),
+            $operatorExtensionId,
             (new \DateTime())->modify('-1 mins'),
             (new \DateTime())->modify('+2 mins')
         );
@@ -117,7 +133,7 @@ class RingCentralAdminTest extends TestCase
         $firstMessage = (array) $result[0];
 
         $uriParts = explode('/', $firstMessage['uri']);
-        $this->assertEquals($this->ringCentral->loggedInExtensionId(), $uriParts[8]);
+        $this->assertEquals($operatorExtensionId, $uriParts[8]);
 
         $this->assertArrayHasKey('id', $firstMessage);
         $this->assertArrayHasKey('to', $firstMessage);
@@ -127,7 +143,7 @@ class RingCentralAdminTest extends TestCase
     }
 
     /** @test */
-    public function it_can_retrieve_operator_sent_sms_messages_with_per_page_limit_set(): void
+    public function it_can_retrieve_sent_sms_messages_for_a_given_extension_with_per_page_limit_set(): void
     {
         $this->ringCentral->sendMessage([
             'to' => env('RINGCENTRAL_RECEIVER'),
@@ -141,8 +157,10 @@ class RingCentralAdminTest extends TestCase
 
         $this->delay();
 
+        $operatorExtensionId = $this->ringCentral->loggedInExtensionId();
+
         $result = $this->ringCentral->getMessagesForExtensionId(
-            $this->ringCentral->loggedInExtensionId(),
+            $operatorExtensionId,
             null,
             null,
             1
@@ -151,7 +169,7 @@ class RingCentralAdminTest extends TestCase
         $this->assertSame(count($result), 1);
 
         $result = $this->ringCentral->getMessagesForExtensionId(
-            $this->ringCentral->loggedInExtensionId(),
+            $operatorExtensionId,
             null,
             null,
             2
@@ -170,15 +188,17 @@ class RingCentralAdminTest extends TestCase
 
         $this->delay();
 
+        $operatorExtensionId = $this->ringCentral->loggedInExtensionId();
+
         $result = $this->ringCentral->getMessagesForExtensionId(
-            $this->ringCentral->loggedInExtensionId(),
+            $operatorExtensionId,
             (new \DateTime())->modify('-1 mins')
         );
 
         $firstMessage = (array) $result[0];
 
         $attachment = $this->ringCentral->getMessageAttachmentById(
-            $this->ringCentral->loggedInExtensionId(),
+            $operatorExtensionId,
             $firstMessage['id'],
             $firstMessage['attachments'][0]->id
         );
