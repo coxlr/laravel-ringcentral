@@ -217,10 +217,13 @@ class RingCentral
         return true;
     }
 
+    /**
+     * @throws ApiException
+     */
     public function adminLoggedIn(): bool
     {
         if ($this->ringCentral->loggedIn()) {
-            return $this->loggedInExtension() === $this->adminExtension();
+            return $this->ringCentral->get('/account/~/extension/~/')->json()?->permissions?->admin?->enabled ?? false;
         }
 
         return false;
@@ -280,7 +283,7 @@ class RingCentral
             $dates['dateTo'] = $toDate->format('c');
         }
 
-        $r = $this->ringCentral->get('/account/~/extension/'.$extensionId.'/message-store', array_merge(
+        $r = $this->ringCentral->get('/account/~/extension/' . $extensionId . '/message-store', array_merge(
             [
                 'messageType' => 'SMS',
                 'perPage' => $perPage,

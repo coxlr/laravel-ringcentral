@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-ringcentral` will be documented in this file
 
+## 3.0.1 - 2023-09-08
+
+- Fixed bug on checking if the logged in user account was the admin account
+
 ## 3.0.0 - 2023-09-06
 
 - Update authentication method to be JWT as RingCentral is discontinuing password-based auth
