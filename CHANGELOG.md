@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-ringcentral` will be documented in this file
 
+## 3.1.0 - 2024-03-14
+
+- Allow Laravel 11
+
 ## 3.0.1 - 2023-09-08
 
 - Fixed bug on checking if the logged in user account was the admin account
