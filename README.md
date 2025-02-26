@@ -1,6 +1,6 @@
 # A Laravel package for the RingCentral SDK for PHP
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/coxlr/laravel-ringcentral.svg?style=flat-square)](https://packagist.org/packages/coxlr/laravel-ringcentral)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/coxlr/laravel-ringcentral.svg?style=flat-square)](https://img.shields.io/packagist/v/coxlr/laravel-ringcentral.svg?style=flat-squaretps://packagist.org/packages/coxlr/laravel-ringcentral)
 [![Tests](https://github.com/coxlr/laravel-ringcentral/actions/workflows/run-tests.yml/badge.svg)](https://github.com/coxlr/laravel-ringcentral/actions/workflows/run-tests.yml)
 [![Total Downloads](https://img.shields.io/packagist/dt/coxlr/laravel-ringcentral.svg?style=flat-square)](https://packagist.org/packages/coxlr/laravel-ringcentral)
 
