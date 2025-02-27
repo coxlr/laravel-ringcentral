@@ -2,6 +2,13 @@
 
 All notable changes to `laravel-ringcentral` will be documented in this file
 
+## 3.2.0 - 2025-02-27
+
+- Add Laravel 12 support
+- Drop support for old Laravel versions
+- Add new GitHub action to auto update change log on release
+- Add new GitHub action to auto merge dependabot merge requests
+
 ## 3.1.0 - 2024-03-14
 
 - Allow Laravel 11
