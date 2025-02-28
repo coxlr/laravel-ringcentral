@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-ringcentral` will be documented in this file
 
+## 3.2.1 - 2025-02-28
+
+Fix bug in update change log GitHub action to correct branch name
+
 ## 3.2.0 - 2025-02-27
 
 - Add Laravel 12 support
